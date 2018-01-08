@@ -11,7 +11,11 @@ import UIKit
 class ViewController : UIViewController {
     
     @IBOutlet private var cardButtons: [UIButton]!
-    @IBOutlet private weak var flipTitleLabel: UILabel!
+    @IBOutlet private weak var flipTitleLabel: UILabel! {
+        didSet {
+            updateFlipLabel()
+        }
+    }
     
     lazy private var game = Concentration(numberOfPairsOfCards: numberOfPairsOfCards)
     
@@ -23,9 +27,18 @@ class ViewController : UIViewController {
     private var emojis = [String]()
     
     
-    private(set) var flipCount = 0 {
+    fileprivate func updateFlipLabel() {
+        let attributeKey: [NSAttributedStringKey:Any] = [
+            NSAttributedStringKey.strokeWidth : 5,
+            NSAttributedStringKey.strokeColor : closeCardColor
+        ]
+        let attributeString = NSAttributedString(string: "Flips : \(flipCount)", attributes: attributeKey)
+        flipTitleLabel.attributedText = attributeString
+    }
+    
+    var flipCount = 0 {
         didSet {
-            flipTitleLabel.text = "Flips : \(flipCount)"
+            updateFlipLabel()
         }
     }
     
